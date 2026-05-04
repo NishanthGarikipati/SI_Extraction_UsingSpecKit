@@ -1,0 +1,266 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schemas/metadata.schema.json",
+  "title": "PDF Metadata Extraction Schema",
+  "description": "Shared schema for extracted academic paper metadata",
+  "type": "object",
+  "required": ["title"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this metadata record",
+      "pattern": "^meta_[a-f0-9]{8}(_[a-f0-9]{4}){3}_[a-f0-9]{12}$"
+    },
+    "title": {
+      "type": "string",
+      "description": "Article title",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "doi": {
+      "type": ["string", "null"],
+      "description": "Digital Object Identifier",
+      "pattern": "^(10\\.\\d+/.+)?$"
+    },
+    "abstract": {
+      "type": ["string", "null"],
+      "description": "Paper abstract or summary",
+      "maxLength": 5000
+    },
+    "keywords": {
+      "type": "array",
+      "description": "Keywords or tags describing the paper",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100
+      },
+      "minItems": 0,
+      "maxItems": 50,
+      "uniqueItems": true
+    },
+    "publication_date": {
+      "type": ["string", "null"],
+      "description": "Publication date in ISO 8601 format (YYYY-MM-DD)",
+      "format": "date"
+    },
+    "journal": {
+      "type": ["object", "null"],
+      "description": "Journal publication information",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Journal name",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "volume": {
+          "type": ["string", "null"],
+          "description": "Journal volume number",
+          "maxLength": 50
+        },
+        "issue": {
+          "type": ["string", "null"],
+          "description": "Journal issue number",
+          "maxLength": 50
+        },
+        "pages": {
+          "type": ["object", "null"],
+          "description": "Page range",
+          "properties": {
+            "start": {
+              "type": ["string", "null"],
+              "description": "Starting page number",
+              "maxLength": 20
+            },
+            "end": {
+              "type": ["string", "null"],
+              "description": "Ending page number",
+              "maxLength": 20
+            }
+          }
+        }
+      }
+    },
+    "authors": {
+      "type": "array",
+      "description": "List of paper authors",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique author identifier",
+            "pattern": "^auth_[0-9]+$"
+          },
+          "sequence": {
+            "type": "integer",
+            "description": "Author sequence number (1-based)",
+            "minimum": 1,
+            "maximum": 1000
+          },
+          "name": {
+            "type": "string",
+            "description": "Full author name",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "email": {
+            "type": ["string", "null"],
+            "description": "Author email address",
+            "format": "email"
+          },
+          "orcid": {
+            "type": ["string", "null"],
+            "description": "ORCID identifier (0000-0001-2345-6789)",
+            "pattern": "^(\\d{4}-\\d{4}-\\d{4}-\\d{3}[0-9X])?$"
+          },
+          "affiliations": {
+            "type": "array",
+            "description": "Author affiliations",
+            "items": {
+              "type": "object",
+              "required": ["institution"],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique affiliation identifier",
+                  "pattern": "^aff_[0-9]+$"
+                },
+                "institution": {
+                  "type": "string",
+                  "description": "Institution name",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "department": {
+                  "type": ["string", "null"],
+                  "description": "Department or faculty name",
+                  "maxLength": 200
+                },
+                "address": {
+                  "type": ["object", "null"],
+                  "description": "Institution address",
+                  "properties": {
+                    "city": {
+                      "type": ["string", "null"],
+                      "description": "City name",
+                      "maxLength": 100
+                    },
+                    "state": {
+                      "type": ["string", "null"],
+                      "description": "State or province",
+                      "maxLength": 100
+                    },
+                    "country": {
+                      "type": ["string", "null"],
+                      "description": "Country name or ISO 3166-1 code",
+                      "maxLength": 100
+                    },
+                    "postal_code": {
+                      "type": ["string", "null"],
+                      "description": "Postal or ZIP code",
+                      "maxLength": 50
+                    }
+                  }
+                }
+              }
+            },
+            "minItems": 0,
+            "maxItems": 100
+          }
+        }
+      },
+      "minItems": 0,
+      "maxItems": 100
+    },
+    "confidence_scores": {
+      "type": "object",
+      "description": "Confidence scores for each extracted field (0.0-1.0)",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0.0,
+        "maximum": 1.0
+      },
+      "properties": {
+        "title": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "doi": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "abstract": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "keywords": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "authors": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "affiliations": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "publication_date": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "journal_name": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+    "overall_confidence": {
+      "type": "number",
+      "description": "Average confidence across all fields",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "extraction_timestamp": {
+      "type": "string",
+      "description": "When the metadata was extracted (ISO 8601 format)",
+      "format": "date-time"
+    },
+    "source_file": {
+      "type": "string",
+      "description": "Original PDF filename",
+      "minLength": 1,
+      "maxLength": 255
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "id": "meta_550e8400_e29b_41d4_a716_446655440002",
+      "title": "Deep Learning for Scientific Document Analysis",
+      "doi": "10.1145/3123456.3456789",
+      "abstract": "This paper presents a novel approach...",
+      "keywords": ["deep learning", "document analysis"],
+      "publication_date": "2024-01-15",
+      "journal": {
+        "name": "ACM Computing Surveys",
+        "volume": "57",
+        "issue": "2",
+        "pages": {
+          "start": "123",
+          "end": "156"
+        }
+      },
+      "authors": [
+        {
+          "id": "auth_001",
+          "sequence": 1,
+          "name": "Jane Smith",
+          "email": "jane@example.com",
+          "affiliations": [
+            {
+              "id": "aff_001",
+              "institution": "MIT",
+              "department": "Computer Science",
+              "address": {
+                "city": "Cambridge",
+                "state": "MA",
+                "country": "USA"
+              }
+            }
+          ]
+        }
+      ],
+      "confidence_scores": {
+        "title": 0.98,
+        "doi": 0.95,
+        "authors": 0.92,
+        "abstract": 0.89,
+        "keywords": 0.87,
+        "journal_name": 0.88
+      },
+      "overall_confidence": 0.91,
+      "extraction_timestamp": "2026-05-04T14:31:00Z",
+      "source_file": "paper_2024.pdf"
+    }
+  ]
+}
