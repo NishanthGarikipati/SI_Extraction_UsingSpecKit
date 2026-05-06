@@ -1,0 +1,66 @@
+# Dependencies
+node_modules/
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Build outputs
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+
+# Frontend
+frontend/dist/
+frontend/.vite/
+
+# Backend
+backend/dist/
+backend/build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+coverage/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Playwright
+tests/e2e/test-results/
+tests/e2e/playwright-report/
+
+# Temp files
+*.tmp
+*.temp
+temp/
+tmp/

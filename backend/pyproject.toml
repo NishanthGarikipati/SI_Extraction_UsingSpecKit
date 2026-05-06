@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdf-metadata-extractor"
+version = "1.0.0"
+description = "PDF Metadata Extraction using RAG with Ollama and LLaMA 2"
+requires-python = ">=3.10"
+authors = [{name = "Development Team"}]
+
+[project.optional-dependencies]
+dev = ["black", "flake8", "mypy", "pytest", "pytest-cov", "pytest-asyncio"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
